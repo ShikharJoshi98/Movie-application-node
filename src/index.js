@@ -8,6 +8,10 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/test', (req, res) => {
+    res.send('Test Api');
+})
+
 app.listen(PORT,async () => {
     console.log(`Server started on port ${PORT}`);
     

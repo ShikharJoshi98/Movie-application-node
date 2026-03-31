@@ -9,4 +9,20 @@ router.post('/createMovie',
     movieController.createMovie
 );
 
+router.get('/getMovie/:id',
+    movieController.getMovie
+);
+
+router.get('/getMovie',
+    movieController.getAllMovies
+);
+
+router.delete('/deleteMovie/:id',
+    movieController.deleteMovie
+)
+
+router.delete('/deleteAllMovies',
+    movieController.deleteAllMovies
+)
+
 module.exports = router;

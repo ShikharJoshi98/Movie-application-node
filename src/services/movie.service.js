@@ -13,13 +13,52 @@ const createMovie = async (data) => {
             })
             throw { err: err, code: STATUS_CODES.UNPROCESSABLE_ENTITY }
         }
-        else {
-            
+        else {            
             throw new error;
         }
     }
 }
 
+const getMovie = async (id) => {
+    try {
+        const movie = await Movie.findById(id);
+        return movie;
+    } catch (error) {
+        throw new error;
+    }
+}
+
+const getAllMovies = async () => {
+    try {
+        const movies = await Movie.find();
+        return movies;
+    } catch (error) {
+        throw new error;
+    }
+}
+
+const deleteMovie = async (id) => {
+    try {
+        const movie = await Movie.findByIdAndDelete(id);
+        return movie;
+    } catch (error) {
+        throw new error;
+    }
+}
+
+const deleteAllMovies = async () => {
+    try {
+        await Movie.deleteMany({});
+        return;
+    } catch (error) {
+        throw new error;
+    }
+}
+
 module.exports = {
-    createMovie
+    createMovie,
+    getMovie,
+    getAllMovies,
+    deleteMovie,
+    deleteAllMovies
 }

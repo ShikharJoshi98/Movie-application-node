@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const { movieRoute } = require('./routes');
+const { movieRoute, theatreRoute } = require('./routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -9,7 +9,8 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/api/mba', movieRoute)
+app.use('/api/mba', movieRoute);
+app.use('/api/mba', theatreRoute);
 
 app.get('/test', (req, res) => {
     res.send('Test Api');

@@ -1,3 +1,4 @@
 module.exports = {
-    movieRoute: require('./movie.route')
+    movieRoute: require('./movie.route'),
+    theatreRoute: require('./theatre.route')
 }

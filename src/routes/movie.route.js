@@ -25,4 +25,8 @@ router.delete('/deleteAllMovies',
     movieController.deleteAllMovies
 )
 
+router.patch('/updateMovie/:id',
+    movieController.updateMovie
+)
+
 module.exports = router;

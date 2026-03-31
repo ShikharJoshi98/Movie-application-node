@@ -13,8 +13,8 @@ const createMovie = async (data) => {
             })
             throw { err: err, code: STATUS_CODES.UNPROCESSABLE_ENTITY }
         }
-        else {            
-            throw new error;
+        else {
+            throw error;
         }
     }
 }
@@ -28,13 +28,25 @@ const getMovie = async (id) => {
     }
 }
 
-const getAllMovies = async () => {
-    try {
-        const movies = await Movie.find();
-        return movies;
-    } catch (error) {
-        throw new error;
+const getAllMovies = async (filter) => {
+    let query = {};
+    if (filter.name) {
+        const search = filter.name.toLowerCase();
+        const pattern = search.split('').join('.*');
+
+        query.nameLowerCase = {
+            $regex: pattern
+        };
     }
+
+    const movie = await Movie.find(query);
+    if (movie.length === 0) {
+        throw {
+            err: 'Not able to find the movie',
+            code: STATUS_CODES.NOT_FOUND
+        }
+    }
+    return movie;
 }
 
 const deleteMovie = async (id) => {
@@ -55,10 +67,35 @@ const deleteAllMovies = async () => {
     }
 }
 
+const updateMovie = async (id, data) => {
+    try {
+        const movie = await Movie.findByIdAndUpdate(id,
+            data,
+            {
+                returnDocument: 'after',
+                runValidators: true
+            }
+        );
+        return movie;
+    } catch (error) {
+        if (error.name == 'ValidationError') {
+            let err = {};
+            Object.keys(error.errors).forEach((key) => {
+                err[key] = error.errors[key].message
+            })
+            throw { err: err, code: STATUS_CODES.UNPROCESSABLE_ENTITY }
+        }
+        else {
+            throw new error;
+        }
+    }
+}
+
 module.exports = {
     createMovie,
     getMovie,
     getAllMovies,
     deleteMovie,
-    deleteAllMovies
+    deleteAllMovies,
+    updateMovie
 }

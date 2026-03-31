@@ -25,9 +25,14 @@ const getMovie = async (req, res) => {
 
 const getAllMovies = async (req, res) => {
     try {
-        const movies = await movieService.getAllMovies();
-        return successResponse(res, movies, 'All Movies fetched successfully', STATUS_CODES.OK);
+        const movie = await movieService.getAllMovies(req.query);
+
+        return successResponse(res, movie, 'Movie fetched successfully', STATUS_CODES.OK);
     } catch (error) {
+        if (error.err == 'Not able to find the movie') {
+             console.log('hello')
+            return errorResponse(res, error.err, error.code);
+        }
         return errorResponse(res, error.message, STATUS_CODES.NOT_FOUND);
     }
 }
@@ -54,10 +59,27 @@ const deleteAllMovies = async (req, res) => {
     }
 }
 
+const updateMovie = async (req, res) => {
+    try {
+        const movie = await movieService.updateMovie(req.params.id, req.body);
+
+        if (!movie) {
+            return errorResponse(res,'Movie does not exist', STATUS_CODES.NOT_FOUND);
+        }
+        return successResponse(res, movie, 'Updated movie successfully', STATUS_CODES.OK);
+    } catch (error) {
+        if (error.err) {
+            return errorResponse(res, error.err, error.err.code);
+        }
+        return errorResponse(res, error.message, STATUS_CODES.INTERNAL_SERVER_ERROR);
+    }
+}
+
 module.exports = {
     createMovie,
     getMovie,
     getAllMovies,
     deleteMovie,
-    deleteAllMovies
+    deleteAllMovies,
+    updateMovie
 }
